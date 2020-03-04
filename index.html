@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body { font-family: monospace, monospace; }
+@media (min-width:320px)  { 
+    body { font-size: 16px; } /* smartphones, iPhone, portrait 480x320 phones */ 
+    #main { width:300px; }
+}
+
+@media (min-width:640px)  {
+    body { font-size: 26px; }
+    #main { width:500px; }
+}
+
+#main { margin:0 auto; }
+
 .cloud {
     display: inline;
     list-style-type: none;
-    width: 400px;
-    font-size: 10px;
-    padding-left: 0px;
+    font-size: 83%;
+    padding-left: 0;
 }
 .cloud li {
     text-indent: 0;
@@ -20,66 +32,74 @@ body { font-family: monospace, monospace; }
 .cloud li.b { font-weight: bold; }
 .cloud li.c { font-weight: 200; }
 .cloud li.d { font-weight: 100; font-size: 83% }
-h1,h2 { margin-bottom: 0px; }
-p.tagline { margin-top: 0px; }
+h1,h2 { margin-bottom: 0; }
+.tagline { margin-top: 0; }
+#contacts { margin: 1em 0 1em 0; }
+#contacts p  { margin: 0 0 0 0; }
 </style>
 </head>
 <body>
-	  <div style="width:500px; margin:0 auto;">
-		    <h1>123automate.it</h1>
-		    <p class="tagline">Getting the robot out of human</p>
-		    <h2>Sergey Evstegneev</h2>
-		    <p class="tagline">RPA software developer</p>
-		    <p><a href="tel:+34671528593">+34 671 528 593</a></p>
-		    <p><a href="mailto:go@123automate.it">go@123automate.it</a></p>
-				<ul class="cloud">
-				    <li class="a">Mindmapping</li>
-				    <li class="b">Decision&nbsp;making</li>
-				    <li class="b">Business&nbsp;process&nbsp;analysis</li>
-				    <li class="b">Spanish</li>
-				    <li class="c">English</li>
-				    <li class="a">Russian</li>
-				    <li class="b">Perl</li>
-				    <li class="b">Ruby</li>
-				    <li class="c">Ruby&nbsp;on&nbsp;Rails</li>
-				    <li class="b">HTML5</li>
-				    <li class="b">CSS3</li>
-				    <li class="c">Javascript</li>
-				    <li class="d">Node.js</li>
-				    <li class="c">PHP</li>
-				    <li class="b">Wordpress</li>
-				    <li class="c">Magento</li>
-				    <li class="a">Data&nbsp;scraping</li>
-				    <li class="b">Selenium</li>
-				    <li class="a">XenServer</li>
-				    <li class="b">Proxmox</li>
-				    <li class="c">Docker</li>
-				    <li class="b">pfSense</li>
-				    <li class="c">ipchains</li>
-				    <li class="c">iptables</li>
-				    <li class="c">ipfw</li>
-				    <li class="c">firewalld</li>
-				    <li class="c">Cybersecurity</li>
-				    <li class="c">Ubiquity&nbsp;Unifi</li>
-				    <li class="c">Mikrotik</li>
-				    <li class="b">VLAN</li>
-				    <li class="d">QoS</li>
-				    <li class="d">VPN</li>
-				    <li class="b">SOAP</li>
-				    <li class="b">RESTful</li>
-				    <li class="b">JSONRPC</li>
-				    <li class="b">Mailchimp</li>
-				    <li class="a">Excel&nbsp;VBA</li>
-				    <li class="a">Autohotkey</li>
-				    <li class="d">UIPath</li>
-				    <li class="b">Linux&nbsp;administration</li>
-				    <li class="b">Nginx</li>
-				    <li class="b">Agile</li>
-				    <li class="b">Git</li>
-				    <li class="b">Mercurial</li>
-				    <li class="b">Jira</li>
-				    <li class="b">YouTrack</li>
-				</ul>
-	  </div>
+    <div id="main">
+        <div id="header">
+            <h1>123automate.it</h1>
+            <p class="tagline">Getting the robot out of human</p>
+            <h2>Sergey Evstegneiev</h2>
+            <p class="tagline">RPA software developer</p>
+        </div>
+        <div id="contacts">
+            <p>Lloret de mar (Girona), Spain</p>
+            <p><a href="tel:+34671528593">+34 671 528 593</a></p>
+            <p><a href="mailto:go@123automate.it">go@123automate.it</a></p>
+        </div>
+        <ul class="cloud">
+            <li class="a">Mindmapping</li>
+            <li class="b">Decision&nbsp;making</li>
+            <li class="b">Business&nbsp;process&nbsp;analysis</li>
+            <li class="b">Spanish</li>
+            <li class="c">English</li>
+            <li class="a">Russian</li>
+            <li class="b">Perl</li>
+            <li class="b">Ruby</li>
+            <li class="c">Ruby&nbsp;on&nbsp;Rails</li>
+            <li class="b">HTML5</li>
+            <li class="b">CSS3</li>
+            <li class="c">Javascript</li>
+            <li class="d">Node.js</li>
+            <li class="c">PHP</li>
+            <li class="b">Wordpress</li>
+            <li class="c">Magento</li>
+            <li class="c">Moodle</li>
+            <li class="a">Data&nbsp;scraping</li>
+            <li class="b">Selenium</li>
+            <li class="a">XenServer</li>
+            <li class="b">Proxmox</li>
+            <li class="c">Docker</li>
+            <li class="b">pfSense</li>
+            <li class="c">ipchains</li>
+            <li class="c">iptables</li>
+            <li class="c">ipfw</li>
+            <li class="c">firewalld</li>
+            <li class="c">Cybersecurity</li>
+            <li class="c">Ubiquity&nbsp;Unifi</li>
+            <li class="c">Mikrotik</li>
+            <li class="b">VLAN</li>
+            <li class="d">QoS</li>
+            <li class="d">VPN</li>
+            <li class="b">SOAP</li>
+            <li class="b">RESTful</li>
+            <li class="b">JSONRPC</li>
+            <li class="b">Mailchimp</li>
+            <li class="a">Excel&nbsp;VBA</li>
+            <li class="a">Autohotkey</li>
+            <li class="d">UIPath</li>
+            <li class="b">Linux&nbsp;administration</li>
+            <li class="b">Nginx</li>
+            <li class="b">Agile</li>
+            <li class="b">Git</li>
+            <li class="b">Mercurial</li>
+            <li class="b">Jira</li>
+            <li class="b">YouTrack</li>
+        </ul>
+    </div>
 </body>
 </html>
