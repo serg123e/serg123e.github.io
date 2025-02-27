@@ -1,112 +1,366 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body { font-family: monospace, monospace; }
-@media (min-width:320px)  { 
-    body { font-size: 16px; } /* smartphones, iPhone, portrait 480x320 phones */ 
-    #main { width:300px; }
-}
-
-@media (min-width:640px)  {
-    body { font-size: 26px; }
-    #main { width:500px; }
-}
-
-#main { margin:0 auto; }
-.icon { heigth: 1em; width: 1em; }
-.cloud {
-    display: inline;
-    list-style-type: none;
-    font-size: 83%;
-    padding-left: 0;
-}
-.cloud li {
-    text-indent: 0;
-    list-style: none;
-    display: inline;
-    margin-left: 0px;
-    margin-right: 10px;
-}
-.cloud li:hover { background: #ccc }
-.cloud li.a { font-weight: bolder; font-size: 120% }
-.cloud li.b { font-weight: bold; }
-.cloud li.c { font-weight: 200; }
-.cloud li.d { font-weight: 100; font-size: 83% }
-h1,h2 { margin-bottom: 0; }
-.tagline { margin-top: 0; }
-#contacts { margin: 1em 0 1em 0; }
-#contacts div  { margin: 0 0 0 0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>123Automate.it - Getting the robot out of human</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            transition: all 0.5s ease;
+        }
+        
+        .content:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #00ffcc, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            color: #f0f0f0;
+        }
+        
+        .location, .email {
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .email {
+            margin-top: 2rem;
+        }
+        
+        .email a {
+            color: #00ccff;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .email a:hover {
+            color: #00ffcc;
+        }
+        
+        .email a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, transparent, #00ccff, transparent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .email a:hover::after {
+            transform: scaleX(1);
+        }
+    </style>
 </head>
 <body>
-    <div id="main">
-        <div id="header">
-            <h1>123automate.it</h1>
-            <div id="mission" class="tagline">Getting the robot out of human</div>
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+        <h1>123Automate.it</h1>
+        <h2>Getting the robot out of human</h2>
+        <div class="location">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Lloret de mar (Girona), Spain
         </div>
-        <div id="contacts">
-            <div id="city">Lloret de mar (Girona), Spain</div>
-            <div id="email"><a href="mailto:go@123automate.it">go@123automate.it</a></div>
+        <div class="email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <a href="mailto:go@123automate.it">go@123automate.it</a>
         </div>
-        <ul id="skills" class="cloud">
-            <li class="a">Ruby&nbsp;on&nbsp;Rails</li>
-            <li class="c">React</li>
-            <li class="b">Sidekiq</li>
-            <li class="b">Kafka</li>
-            <li class="b">AWS</li>
-            <li class="c">Perl</li>
-            <li class="a">Ruby</li>
-            <li class="c"><a href="https://github.com/serg123e/irirangi">Python</a></li>
-            <li class="c"><a href="https://jsfiddle.net/serg123e/ypx4oza8/1/">Javascript</a></li>
-            <li class="d">Golang</li>
-            <li class="d">Solidity</li>
-            <li class="d">Node.js</li>
-            <li class="c">PHP</li>
-            <li class="b">Wordpress</li>
-            <li class="c">Magento</li>
-            <li class="c">Moodle</li>
-            <li class="b">Spanish</li>
-            <li class="b">English</li>
-            <li class="a">Russian</li>
-            <li class="b">Mindmapping</li>
-            <li class="b">Process automation</li>
-            <li class="b">Data&nbsp;scraping</li>
-            <li class="b">RPA</li>
-            <li class="b"><a href="https://www.distilennui.com/journal/nft-art-and-the-mis-conception-concerning-their-uniqueness-i-have-developed-nfc-art-tag-authentication.html">NFC</a></li>
-            <li class="b">FPV</li>
-            <li class="c"><a href="https://github.com/serg123e/avatars-detector">ML</a></li>
-            <li class="c">AI</li>
-            <li class="c">NLP</li>
-            <li class="c">Selenium</li>
-            <li class="c">XenServer</li>
-            <li class="c">Proxmox</li>
-            <li class="b">Docker</li>
-            <li class="b">Kubernetes</li>
-            <li class="c">pfSense</li>
-            <li class="d">ipchains</li>
-            <li class="d">iptables</li>
-            <li class="d">ipfw</li>
-            <li class="d">firewalld</li>
-            <li class="d">Infosec</li>
-            <li class="c">Ubiquity&nbsp;Unifi</li>
-            <li class="c">Mikrotik</li>
-            <li class="c">VoIP</li>
-            <li class="c">SOAP</li>
-            <li class="b">RESTful</li>
-            <li class="c">JSONRPC</li>
-            <li class="c">Excel&nbsp;VBA</li>
-            <li class="b">Autohotkey</li>
-            <li class="d">UIPath</li>
-            <li class="c">Linux&nbsp;administration</li>
-            <li class="c">Nginx</li>
-            <li class="b">Agile</li>
-            <li class="b">Git</li>
-            <li class="d">Mercurial</li>
-            <li class="b">Jira</li>
-            <li class="d">YouTrack</li>
-        </ul>
     </div>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        // Set canvas to full window size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Automation elements
+        class Node {
+            constructor(x, y, radius, type) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.type = type; // "source", "process", "destination"
+                this.connections = [];
+                this.color = type === "source" ? "#00ffcc" : 
+                              type === "process" ? "#00ccff" : "#ff00cc";
+                this.pulses = [];
+                this.active = Math.random() > 0.5;
+                this.opacity = this.active ? 1 : 0.3;
+                this.activationTime = Math.random() * 5000;
+                this.lastPulseTime = 0;
+                this.pulseInterval = 1000 + Math.random() * 2000;
+            }
+            
+            connect(node) {
+                if (!this.connections.includes(node)) {
+                    this.connections.push(node);
+                }
+            }
+            
+            update(time) {
+                // Toggle active state periodically
+                if (time % 10000 < this.activationTime && time % 10000 >= this.activationTime - 100) {
+                    this.active = !this.active;
+                    this.opacity = this.active ? 1 : 0.3;
+                }
+                
+                // Create new pulses
+                if (this.active && time - this.lastPulseTime > this.pulseInterval) {
+                    this.lastPulseTime = time;
+                    
+                    // Send pulse to random connection
+                    if (this.connections.length > 0 && Math.random() > 0.3) {
+                        const randomConnection = this.connections[Math.floor(Math.random() * this.connections.length)];
+                        if (randomConnection.active) {
+                            this.pulses.push({
+                                target: randomConnection,
+                                progress: 0,
+                                speed: 0.002 + Math.random() * 0.003
+                            });
+                        }
+                    }
+                }
+                
+                // Update existing pulses
+                for (let i = this.pulses.length - 1; i >= 0; i--) {
+                    const pulse = this.pulses[i];
+                    pulse.progress += pulse.speed;
+                    
+                    if (pulse.progress >= 1) {
+                        // Trigger target node to potentially send a pulse
+                        if (pulse.target.active && Math.random() > 0.5) {
+                            pulse.target.lastPulseTime = time - pulse.target.pulseInterval + 200;
+                        }
+                        this.pulses.splice(i, 1);
+                    }
+                }
+            }
+            
+            draw() {
+                // Draw connections
+                ctx.globalAlpha = this.opacity * 0.3;
+                this.connections.forEach(node => {
+                    if (node.active || this.active) {
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, this.y);
+                        ctx.lineTo(node.x, node.y);
+                        ctx.strokeStyle = "#ffffff";
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                });
+                
+                // Draw node
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // Draw a small inner circle for process nodes
+                if (this.type === "process") {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
+                    ctx.fillStyle = "#121212";
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 0.4, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+                
+                // Draw an icon for source and destination nodes
+                if (this.type === "source") {
+                    ctx.beginPath();
+                    ctx.moveTo(this.x - this.radius * 0.3, this.y - this.radius * 0.3);
+                    ctx.lineTo(this.x + this.radius * 0.5, this.y);
+                    ctx.lineTo(this.x - this.radius * 0.3, this.y + this.radius * 0.3);
+                    ctx.fillStyle = "#121212";
+                    ctx.fill();
+                } else if (this.type === "destination") {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
+                    ctx.fillStyle = "#121212";
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 0.4, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+                
+                // Draw pulses
+                this.pulses.forEach(pulse => {
+                    const targetX = pulse.target.x;
+                    const targetY = pulse.target.y;
+                    const dx = targetX - this.x;
+                    const dy = targetY - this.y;
+                    
+                    const pulseX = this.x + dx * pulse.progress;
+                    const pulseY = this.y + dy * pulse.progress;
+                    
+                    ctx.beginPath();
+                    ctx.arc(pulseX, pulseY, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fill();
+                });
+                
+                ctx.globalAlpha = 1;
+            }
+        }
+        
+        // Create automation network
+        const nodes = [];
+        const numNodes = 30;
+        
+        // Create nodes
+        for (let i = 0; i < numNodes; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const radius = 5 + Math.random() * 8;
+            
+            let type;
+            if (i < numNodes * 0.2) {
+                type = "source";
+            } else if (i < numNodes * 0.8) {
+                type = "process";
+            } else {
+                type = "destination";
+            }
+            
+            nodes.push(new Node(x, y, radius, type));
+        }
+        
+        // Create connections between nodes
+        nodes.forEach(node => {
+            // Sources connect to processes
+            if (node.type === "source") {
+                const processes = nodes.filter(n => n.type === "process");
+                const numConnections = 1 + Math.floor(Math.random() * 3);
+                
+                for (let i = 0; i < numConnections; i++) {
+                    const randomProcess = processes[Math.floor(Math.random() * processes.length)];
+                    node.connect(randomProcess);
+                }
+            }
+            // Processes connect to processes and destinations
+            else if (node.type === "process") {
+                const targets = nodes.filter(n => (n.type === "process" || n.type === "destination") && n !== node);
+                const numConnections = Math.floor(Math.random() * 3);
+                
+                for (let i = 0; i < numConnections; i++) {
+                    const randomTarget = targets[Math.floor(Math.random() * targets.length)];
+                    node.connect(randomTarget);
+                }
+            }
+        });
+        
+        // Animation loop
+        let lastTime = 0;
+        
+        function animate(time) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw faint grid
+            ctx.globalAlpha = 0.05;
+            const gridSize = 30;
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1;
+            
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            ctx.globalAlpha = 1;
+            
+            // Update and draw nodes
+            nodes.forEach(node => {
+                node.update(time);
+                node.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate(0);
+    </script>
 </body>
 </html>
