@@ -161,7 +161,7 @@ class Node {
             // Send impulse to random connection
             this.sendRandomImpulse();
         }
-        if (this.type == "process" && this.processingPulses > 0 && Math.random() > 0.9) {
+        if (this.type == "process" && this.processingPulses > 0 && Math.random() > 0.98) {
             this.sendRandomImpulse();
         }
         // Update existing impulses
@@ -207,14 +207,18 @@ class Node {
             
             if (pulse.progress >= 1) {
                 pulse.target.processingPulses += 1;
+                pulse.target.active = true;
+                pulse.target.opacity = pulse.target.active ? 1 : 0.3;
+                pulse.target.targetOpacity = pulse.target.opacity;
+
                 // When an impulse reaches its target
                 if (pulse.target.active) {
                     // Process nodes forward received impulses to their connections
-                    if (pulse.target.type === "process" && Math.random() > 0.3) {
+                    if (pulse.target.type === "process" && Math.random() > 0.7) {
                         pulse.target.sendRandomImpulse();
                     }
                 }
-                
+
                 // Recycle the pulse object
                 recyclePulse(pulse);
                 

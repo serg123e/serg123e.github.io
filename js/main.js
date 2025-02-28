@@ -54,14 +54,29 @@ function initApp() {
     setupInputHandlers(canvas, appState);
     
     // Initial layout with full strength
-    applyForceLayout(appState.nodes, canvas.width, canvas.height, appState.contentRect, 0.5);
+    applyForceLayout(appState.nodes, canvas.width, canvas.height, appState.contentRect, 1.5);
     
     // Start animation loop
     startAnimation(appState, renderNodes);
     
     // Listen for window resize to update content rect
     window.addEventListener('resize', () => {
+        // Resize canvas
+        initCanvas();
+        
+        // Update content rectangle
         updateContentRect();
+        
+        // Reapply force layout with adjusted dimensions
+        if (canvas) {
+            applyForceLayout(
+                appState.nodes, 
+                canvas.width, 
+                canvas.height, 
+                appState.contentRect,
+                1.5 // Medium strength for resize adjustment
+            );
+        }
     });
 }
 
@@ -144,26 +159,6 @@ function drawContentRect(ctx) {
         ctx.globalAlpha = 1.0;
     }
 }
-
-// Handle window resize
-window.addEventListener('resize', () => {
-    // Resize canvas
-    initCanvas();
-    
-    // Update content rectangle
-    updateContentRect();
-    
-    // Reapply force layout with adjusted dimensions
-    if (canvas) {
-        applyForceLayout(
-            appState.nodes, 
-            canvas.width, 
-            canvas.height, 
-            appState.contentRect,
-            10.5 // Medium strength for resize adjustment
-        );
-    }
-});
 
 // Export app state for other modules to use
 export { appState };

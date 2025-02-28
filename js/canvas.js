@@ -17,7 +17,7 @@ function initCanvas() {
     ctx = canvas.getContext('2d', { alpha: false });
     
     // Set canvas size accounting for device pixel ratio
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = 1; // window.devicePixelRatio || 1;
     resizeCanvas(dpr);
     
     return canvas;

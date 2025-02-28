@@ -1,7 +1,5 @@
 /**
- * force-layout.js - Force-directed layout algorithm
- * 
- * Implements a physics-based layout algorithm to position nodes optimally
+ * Improved force-layout.js - Force-directed layout algorithm with mobile fixes
  */
 
 /**
@@ -14,18 +12,20 @@
  * @returns {Array} Updated nodes with calculated velocities
  */
 function applyForceLayout(nodes, width, height, contentRect, strength = 1) {
-    // Parameters for the simulation
+    if (strength <= 0) return;
+
+    // Parameters for the simulation - adjusted for better mobile display
     const config = {
-        iterations: strength > 0.5 ? 1 : 1, // Fewer iterations for gentle updates
-        repulsionForce: 5000 * strength,      // Force pushing nodes apart
-        attractionForce: 0.004 * strength,    // Force pulling connected nodes together
-        contentRepulsionForce: 3.0 * strength,// Force pushing nodes away from content div
-        contentPadding: 20,                   // Extra padding around content div
-        maxDisplacement: 15 * strength,       // Max movement per step
-        coolingFactor: 0.9,                   // Reduces movement over time
-        minDistance: 300,                     // Minimum target distance between nodes
-        edgePadding: 100,                     // Padding from canvas edges
-        edgeForce: 20 * strength            // Force keeping nodes away from edges
+        iterations: strength > 0.5 ? 2 : 1,    // More iterations for initial layout
+        repulsionForce: 5000 * strength,       // Reduced from 5000 for less aggressive spreading
+        attractionForce: 0.004 * strength,     // Increased from 0.004 for stronger connections
+        contentRepulsionForce: 3.0 * strength, // Force pushing nodes away from content div
+        contentPadding: 20,                    // Extra padding around content div
+        maxDisplacement: 15 * strength,        // Reduced from 15 for more controlled movement
+        coolingFactor: 0.9,                    // Reduces movement over time
+        minDistance: Math.min(width, height) * 0.15, // Scale with screen size instead of fixed 300
+        edgePadding: Math.min(width, height) * 0.01,  // Scale with screen size instead of fixed 100
+        edgeForce: 1 * strength                // Reduced from 20 for more gentle boundary forces
     };
     
     // Get center of canvas
@@ -45,12 +45,17 @@ function applyForceLayout(nodes, width, height, contentRect, strength = 1) {
     
     // Get the content div dimensions
     if (!contentRect) {
-        // Default content rectangle if not provided
+        // Default content rectangle if not provided - adaptive to screen size
+        const contentWidth = Math.min(600, width * 0.8);
+        const contentHeight = Math.min(400, height * 0.6);
+        
         contentRect = {
-            left: width / 2 - 300,
-            right: width / 2 + 300,
-            top: height / 2 - 200,
-            bottom: height / 2 + 200
+            left: width / 2 - contentWidth / 2,
+            right: width / 2 + contentWidth / 2,
+            top: height / 2 - contentHeight / 2,
+            bottom: height / 2 + contentHeight / 2,
+            width: contentWidth,
+            height: contentHeight
         };
     }
     
@@ -67,14 +72,44 @@ function applyForceLayout(nodes, width, height, contentRect, strength = 1) {
         const original = originalVelocities.get(node);
         if (original) {
             // Linear interpolation between old and new velocities
-            // Higher blendFactor means more influence from new calculation
             const blendFactor = 0.7;
             node.vx = node.vx * blendFactor + original.vx * (1 - blendFactor);
             node.vy = node.vy * blendFactor + original.vy * (1 - blendFactor);
         }
+        
+        // Add extra boundary enforcement
+        enforceBoundaries(node, width, height);
     });
     
-    return nodes; // Return nodes with updated velocities for animation
+    return nodes;
+}
+
+/**
+ * Add extra boundary enforcement to keep nodes within the visible canvas
+ * @param {Object} node - Node to check
+ * @param {number} width - Canvas width
+ * @param {number} height - Canvas height 
+ */
+function enforceBoundaries(node, width, height) {
+    const margin = node.radius * 2;
+    
+    // Check if node is outside or very close to the boundary
+    if (node.x < margin) {
+        node.x = margin;
+        node.vx = Math.abs(node.vx) * 0.5; // Bounce with reduced velocity
+    }
+    if (node.x > width - margin) {
+        node.x = width - margin;
+        node.vx = -Math.abs(node.vx) * 0.5;
+    }
+    if (node.y < margin) {
+        node.y = margin;
+        node.vy = Math.abs(node.vy) * 0.5;
+    }
+    if (node.y > height - margin) {
+        node.y = height - margin;
+        node.vy = -Math.abs(node.vy) * 0.5;
+    }
 }
 
 /**
@@ -120,7 +155,7 @@ function applyForces(nodes, centerX, centerY, width, height, contentRect, config
         // Apply content rectangle repulsion - push nodes away from content div
         applyContentRepulsion(nodeA, contentRect, config);
         
-        // Apply edge forces to keep nodes within canvas
+        // Apply edge forces to keep nodes within canvas - strengthened for mobile
         applyEdgeForces(nodeA, width, height, config);
         
         // Apply repulsion forces between all node pairs
@@ -161,8 +196,8 @@ function applyContentRepulsion(node, contentRect, config) {
         // Find closest edge
         const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
         
-        // Apply force in direction of closest edge
-        const force = config.contentRepulsionForce * 2;
+        // Apply force in direction of closest edge - strengthen for mobile
+        const force = config.contentRepulsionForce * 3; // Increased from 2
         
         if (minDist === distToLeft) {
             // Push left
@@ -189,7 +224,7 @@ function applyContentRepulsion(node, contentRect, config) {
         const distance = Math.sqrt(dx * dx + dy * dy);
         
         // Only apply force if node is close to rectangle
-        const repulsionRadius = 100; // How far the repulsion extends
+        const repulsionRadius = Math.min(100, Math.max(50, (contentRect.width + contentRect.height)/8));
         
         if (distance < repulsionRadius && distance > 0) {
             // Force decreases with distance
@@ -203,33 +238,38 @@ function applyContentRepulsion(node, contentRect, config) {
 }
 
 /**
- * Apply edge forces to keep a node within canvas
+ * Apply edge forces to keep a node within canvas - improved for mobile
  * @param {Object} node - Node to apply force to
  * @param {number} width - Canvas width
  * @param {number} height - Canvas height
  * @param {Object} config - Simulation parameters
  */
 function applyEdgeForces(node, width, height, config) {
-    // Left edge
+    // Calculate stronger forces for mobile screens
+    const scaledEdgeForce = config.edgeForce * (1 + (1000 / Math.min(width, height)));
+    
+    // Left edge - progressive force (stronger when closer to edge)
     if (node.x < config.edgePadding) {
-        node.vx += config.edgeForce * (1 - node.x / config.edgePadding);
+        const factor = Math.pow(1 - node.x / config.edgePadding, 2); // Exponential
+        node.vx += scaledEdgeForce * factor;
     }
     
     // Right edge
     if (node.x > width - config.edgePadding) {
-        node.vx -= config.edgeForce * 
-            (1 - (width - node.x) / config.edgePadding);
+        const factor = Math.pow(1 - (width - node.x) / config.edgePadding, 2);
+        node.vx -= scaledEdgeForce * factor;
     }
     
     // Top edge
     if (node.y < config.edgePadding) {
-        node.vy += config.edgeForce * (1 - node.y / config.edgePadding);
+        const factor = Math.pow(1 - node.y / config.edgePadding, 2);
+        node.vy += scaledEdgeForce * factor;
     }
     
     // Bottom edge
     if (node.y > height - config.edgePadding) {
-        node.vy -= config.edgeForce * 
-            (1 - (height - node.y) / config.edgePadding);
+        const factor = Math.pow(1 - (height - node.y) / config.edgePadding, 2);
+        node.vy -= scaledEdgeForce * factor;
     }
 }
 
@@ -252,7 +292,7 @@ function applyNodeRepulsion(nodeA, nodes, startIndex, config) {
         const distance = Math.sqrt(dx * dx + dy * dy) || 1; // Avoid division by zero
         
         // Stronger repulsion for closer nodes
-        if (distance < config.minDistance * 3) {
+        if (distance < config.minDistance * 2) { // Reduced from 3 for tighter layout on mobile
             const force = config.repulsionForce / (distance * distance);
             const forceX = (dx / distance) * force;
             const forceY = (dy / distance) * force;
@@ -297,7 +337,7 @@ function applyConnectionAttractions(nodes, config) {
 }
 
 /**
- * Update node positions based on velocities
+ * Update node positions based on velocities - improved for mobile
  * @param {Array} nodes - All nodes in the network
  * @param {number} width - Canvas width
  * @param {number} height - Canvas height
@@ -312,12 +352,32 @@ function updatePositions(nodes, width, height, animationSpeed = 0.03) {
         node.x += node.vx * animationSpeed;
         node.y += node.vy * animationSpeed;
         
-        // Keep nodes within canvas boundaries with some padding
+        // More aggressive boundary enforcement
         const padding = node.radius * 2;
-        node.x = Math.max(padding, Math.min(width - padding, node.x));
-        node.y = Math.max(padding, Math.min(height - padding, node.y));
+        
+        // Check if somehow node escaped the canvas (can happen with high velocities)
+        if (node.x < padding || node.x > width - padding ||
+            node.y < padding || node.y > height - padding) {
+            
+            // Enforce boundaries and reverse velocity component
+            if (node.x < padding) {
+                node.x = padding;
+                node.vx = Math.abs(node.vx) * 0.5; // Bounce back with reduced speed
+            }
+            if (node.x > width - padding) {
+                node.x = width - padding;
+                node.vx = -Math.abs(node.vx) * 0.5;
+            }
+            if (node.y < padding) {
+                node.y = padding;
+                node.vy = Math.abs(node.vy) * 0.5;
+            }
+            if (node.y > height - padding) {
+                node.y = height - padding;
+                node.vy = -Math.abs(node.vy) * 0.5;
+            }
+        }
     });
 }
 
-// Export functions
 export { applyForceLayout, updatePositions };
