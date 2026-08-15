@@ -49,14 +49,23 @@ function startAnimation(appState, renderCallback) {
     // Animation loop with time-based animation
     function animate(timestamp) {
         // Calculate delta time for smooth animations
-        const deltaTime = timestamp - (appState.lastFrameTime || timestamp);
-        appState.lastFrameTime = timestamp;
-        
-        // Only render if enough time has passed since last frame
-        if (deltaTime >= appState.frameInterval) {
+        if (!appState.lastFrameTime) {
+            appState.lastFrameTime = timestamp;
+        }
+        const deltaTime = timestamp - appState.lastFrameTime;
+
+        // Only render if enough time has passed since last frame.
+        // The threshold is slightly below frameInterval so that a display
+        // running at exactly 60Hz is not skipped by floating point jitter,
+        // and lastFrameTime is advanced only on rendered frames so the delta
+        // keeps accumulating on displays faster than 60Hz (120/144/165Hz),
+        // where every individual frame is shorter than frameInterval.
+        if (deltaTime >= appState.frameInterval * 0.9) {
+            appState.lastFrameTime = timestamp;
+
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // Call the render callback
             renderCallback(ctx, timestamp, deltaTime);
         }
